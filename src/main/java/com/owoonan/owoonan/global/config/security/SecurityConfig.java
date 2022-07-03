@@ -52,6 +52,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
+    private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"    };
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -69,9 +79,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                    .antMatchers("/tutee/**","tutor/**").hasAnyAuthority(RoleType.USER.getCode())
+                    .antMatchers(PERMIT_URL_ARRAY).permitAll()
+                    .antMatchers("/**").hasAnyAuthority(RoleType.USER.getCode())
                     .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
-                    .antMatchers("/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .oauth2Login()

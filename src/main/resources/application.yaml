@@ -38,8 +38,10 @@ spring:
           tokenUri: https://kauth.kakao.com/oauth/token
           userInfoUri: https://kapi.kakao.com/v2/user/me
           userNameAttribute: id
-
-
+  #https://goyunji.tistory.com/137
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 
 # cors 설정
