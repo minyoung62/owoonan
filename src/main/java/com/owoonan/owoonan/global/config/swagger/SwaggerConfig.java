@@ -23,7 +23,8 @@ public class SwaggerConfig {
 
     private static final String apiTitle = "오운완 REST API";
     private static final String apiVersion = "1.0.0";
-    private static final String apiDescription = "오운완 REST API 명세서";
+    private static final String apiDescription = "오운완 REST API 명세서\n" +
+            "Authorize인증은 Bearer {jwtToken} 형태로 넣어줘야한다. ";
 
     @Bean
     public Docket restAPI() {
