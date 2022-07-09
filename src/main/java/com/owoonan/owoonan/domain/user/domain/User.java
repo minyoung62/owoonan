@@ -23,11 +23,6 @@ import java.util.List;
 @Table(name = "users")
 public class User extends BaseEntity {
 
-    @JsonIgnore
-    @Column(name = "USER_SEQ")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userSeq;
-
     @Id
     @Column(name = "USER_ID", length = 64, unique = true)
     @NotNull
@@ -46,15 +41,6 @@ public class User extends BaseEntity {
     @NotNull
     private String email;
 
-    @Column(length = 20, unique = true)
-    @NotNull
-    private String nickname;
-
-    @NotNull
-    private Double weight;
-
-    @NotNull
-    private Double height;
 
 
     @Column(name = "EMAIL_VERIFIED_YN", length = 1)
