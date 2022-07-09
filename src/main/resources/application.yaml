@@ -5,6 +5,12 @@ spring:
   security:
     oauth2.client:
       registration:
+        google:
+          clientId: '798796400666-mo7olnatp45c5kgjij5kok5ggko84a13.apps.googleusercontent.com'
+          clientSecret: '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'
+          scope:
+            - email
+            - profile
         naver:
           clientId: 'VgAgD2O7aMtJf12XSXRE'
           clientSecret: 'e0oflNYpl_'

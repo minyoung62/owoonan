@@ -3,6 +3,7 @@ package com.owoonan.owoonan.global.oauth.info;
 
 
 import com.owoonan.owoonan.domain.user.domain.vo.ProviderType;
+import com.owoonan.owoonan.global.oauth.info.impl.GoogleOAuth2UserInfo;
 import com.owoonan.owoonan.global.oauth.info.impl.KakaoOAuth2UserInfo;
 import com.owoonan.owoonan.global.oauth.info.impl.NaverOAuth2UserInfo;
 
@@ -13,6 +14,7 @@ public class OAuth2UserInfoFactory {
         switch (providerType) {
             case KAKAO: return new KakaoOAuth2UserInfo(attributes);
             case NAVER: return new NaverOAuth2UserInfo(attributes);
+            case GOOGLE: return new GoogleOAuth2UserInfo(attributes);
             default: throw new IllegalArgumentException("Invalid Provider Type.");
         }
     }

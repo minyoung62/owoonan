@@ -22,7 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Can not find username.");
         }
-        System.out.println(user.getRoleType());
         return UserPrincipal.create(user);
     }
 }

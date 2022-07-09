@@ -7,9 +7,22 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-    TEST(400, "test", "test");
+    // jwt
+    TOKEN_IS_NULL(401, "J001", "토큰이 존재하지 않습니다."),
+
+    // User
+    USER_NOT_FOUND(500, "U001", "해당 유저가 존재하지 않습니다"),
+
+    // Workout
+    WORKOUT_NOT_FOUND(501, "W001", "해당 운동이 존재하지 않습니다"),
+    WORKOUT_MISS_MATCH(502, "W001", "해당 사용자의 운동이 아닙니다"),
+    WORKOUT_NAME_DUPLICATION(503, "W003", "중복된 운동 이름 입니다");
 
     private final int status;
     private final String code;
     private final String message;
+
+    public static String getMsg(ErrorCode errorCode){
+        return errorCode.message;
+    }
 }
