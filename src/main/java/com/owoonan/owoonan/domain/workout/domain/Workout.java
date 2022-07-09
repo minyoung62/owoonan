@@ -1,9 +1,12 @@
 package com.owoonan.owoonan.domain.workout.domain;
 
 import com.owoonan.owoonan.domain.user.domain.User;
-import com.owoonan.owoonan.domain.workout.domain.vo.WorkoutRegion;
+import com.owoonan.owoonan.domain.workout.domain.vo.WorkoutPart;
+import com.owoonan.owoonan.domain.workout.error.WorkoutMissMatchException;
+import com.owoonan.owoonan.domain.workout.error.WorkoutNameDuplicationException;
 import com.owoonan.owoonan.domain.workoutroutine.domain.WorkoutRoutine;
 import com.owoonan.owoonan.global.common.BaseEntity;
+import com.owoonan.owoonan.global.error.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +33,7 @@ public class Workout extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WorkoutRegion workoutRegion;
+    private WorkoutPart workoutPart;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -39,10 +42,21 @@ public class Workout extends BaseEntity {
     private List<WorkoutRoutine> workoutRoutines = new ArrayList<>();
 
     @Builder
-    public Workout(Long workoutId, String workoutName, WorkoutRegion workoutRegion, User user) {
+    public Workout(Long workoutId, String workoutName, WorkoutPart workoutPart, User user) {
         this.workoutId = workoutId;
         this.workoutName = workoutName;
-        this.workoutRegion = workoutRegion;
+        this.workoutPart = workoutPart;
         this.user = user;
+    }
+
+    public Workout addUser(final User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void update(final Workout updateWorkout, final User user) {
+        if (updateWorkout.getUser().getUserId() != user.getUserId()) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
+        if (this.workoutName.equals(updateWorkout.getWorkoutName())) throw new WorkoutNameDuplicationException(ErrorCode.WORKOUT_NAME_DUPLICATION);
+        this.workoutName = updateWorkout.getWorkoutName();
     }
 }
