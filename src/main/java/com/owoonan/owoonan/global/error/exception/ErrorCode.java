@@ -12,7 +12,7 @@ public enum ErrorCode {
 
     // User
     USER_NOT_FOUND(500, "U001", "해당 유저가 존재하지 않습니다"),
-    USER_ALREADY_REGISTER(500, "U002", "이미 가입한 유저입니다"),
+    USER_ALREADY_REGISTER(506, "U002", "이미 가입한 유저입니다"),
 
     // Workout
     WORKOUT_NOT_FOUND(501, "W001", "해당 운동이 존재하지 않습니다"),

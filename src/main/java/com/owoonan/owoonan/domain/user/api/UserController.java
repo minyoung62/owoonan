@@ -36,6 +36,10 @@ public class UserController {
 
     @PostMapping()
     @ApiOperation(value = "사용자 등록", notes = "RoleType이 GUEST이면 이 API를 이용해 USER로 만들 수 있음")
+    @ApiResponses({
+            @ApiResponse(code=500, message = "해당 유저가 존재하지 않습니다", response = ErrorResponse.class),
+            @ApiResponse(code=506, message = "이미 가입한 유저입니다", response = ErrorResponse.class),
+    })
     public ResponseEntity<Void> registerUser() {
         userService.registerUser(getPrincipal().getUsername());
         return ResponseEntity.status(HttpStatus.OK).build();
