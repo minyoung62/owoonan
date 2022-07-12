@@ -11,4 +11,6 @@ public interface WorkoutRepositoryCustom {
     List<WorkoutResponseDto> findByPart(WorkoutPart workoutPart, String userId);
 
     Workout findByWorkoutName(String workoutName);
+
+    List<Workout> findByWorkoutIds(List<Long> workoutIds);
 }
