@@ -35,4 +35,14 @@ public class WorkoutRepositoryImpl implements  WorkoutRepositoryCustom{
                 .fetchOne();
     }
 
+    @Override
+    public List<Workout> findByWorkoutIds(List<Long> workoutIds) {
+        return query.
+                select(workout)
+                .from(workout)
+                .where(workout.workoutId.in(workoutIds))
+                .fetch();
+    }
+
+
 }

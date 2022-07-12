@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum WorkoutPart {
-    Chest("가슴"),
+    CHEST("가슴"),
     SHOULDER("어깨"),
     BACK("등"),
     ARM("팔"),
