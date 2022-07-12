@@ -21,7 +21,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/workout")
+@RequestMapping("/api/v1/workout")
 @RequiredArgsConstructor
 @Api(tags="운동 기능")
 public class WorkoutApi {
@@ -72,6 +72,7 @@ public class WorkoutApi {
     })
     public ResponseEntity<Void> update(@PathVariable Long workoutId,
                                        @Valid @RequestBody WorkoutUpdateRequestDto updateRequestDto) {
+
         workoutService.update(workoutId, updateRequestDto.toEntity(), getPrincipal().getUsername());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
