@@ -14,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -34,7 +31,14 @@ public class UserController {
 
     })
     public ResponseEntity<UserResponseDto> getUser() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(getPrincipal().getUsername()));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findUser(getPrincipal().getUsername()));
+    }
+
+    @PostMapping()
+    @ApiOperation(value = "사용자 등록", notes = "RoleType이 GUEST이면 이 API를 이용해 USER로 만들 수 있음")
+    public ResponseEntity<Void> registerUser() {
+        userService.registerUser(getPrincipal().getUsername());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping
