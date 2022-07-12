@@ -99,7 +99,7 @@ public class RoutineService {
     public void delete(final Long routineId, final String userId) {
         User user = getUser(userId);
         Routine routine = routineRepository.findById(routineId)
-                .orElseThrow(() -> new RoutineNotFoundException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new RoutineNotFoundException(ErrorCode.ROUTINE_NOT_FOUND));
         if (routine.getUser().getUserId() != user.getUserId()) {
             throw new RoutineMissMatchException(ErrorCode.ROUTINE_MISS_MATCH);
         }
