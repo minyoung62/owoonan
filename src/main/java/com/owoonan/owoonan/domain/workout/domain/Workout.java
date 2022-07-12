@@ -1,5 +1,6 @@
 package com.owoonan.owoonan.domain.workout.domain;
 
+import com.owoonan.owoonan.domain.record.domain.Record;
 import com.owoonan.owoonan.domain.user.domain.User;
 import com.owoonan.owoonan.domain.workout.domain.vo.WorkoutPart;
 import com.owoonan.owoonan.domain.workout.error.WorkoutMissMatchException;
@@ -41,6 +42,9 @@ public class Workout extends BaseEntity {
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
     private List<WorkoutRoutine> workoutRoutines = new ArrayList<>();
 
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL)
+    private List<Record> records = new ArrayList<>();
+
     @Builder
     public Workout(Long workoutId, String workoutName, WorkoutPart workoutPart, User user) {
         this.workoutId = workoutId;
@@ -55,7 +59,7 @@ public class Workout extends BaseEntity {
     }
 
     public void update(final Workout updateWorkout, final User user) {
-        if (updateWorkout.getUser().getUserId() != user.getUserId()) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
+        if (this.getUser().getUserId() != user.getUserId()) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
         if (this.workoutName.equals(updateWorkout.getWorkoutName())) throw new WorkoutNameDuplicationException(ErrorCode.WORKOUT_NAME_DUPLICATION);
         this.workoutName = updateWorkout.getWorkoutName();
     }
