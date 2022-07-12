@@ -13,8 +13,8 @@ import com.owoonan.owoonan.global.error.exception.ErrorCode;
 import com.owoonan.owoonan.global.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -33,12 +33,14 @@ public class WorkoutService {
         return WorkoutResponseDto.of(save);
     }
 
+    @Transactional(readOnly = true)
     public WorkoutResponseDto findById(final Long workoutId) {
         Workout workout = workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new WorkoutNotFoundException(ErrorCode.WORKOUT_NOT_FOUND));
         return WorkoutResponseDto.of(workout);
     }
 
+    @Transactional(readOnly = true)
     public List<WorkoutResponseDto> findByPart(final WorkoutPart workoutPart, final String userId) {
         User user = getUser(userId);
         return workoutRepository.findByPart(workoutPart, user.getUserId());
