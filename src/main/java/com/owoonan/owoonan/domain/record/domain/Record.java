@@ -9,8 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -23,6 +26,8 @@ public class Record extends BaseEntity {
     @Column(nullable = false)
     private Long recordId;
 
+    @Column(updatable = false)
+    private LocalDate saveTime;
 
     private String userId;
 
@@ -51,5 +56,9 @@ public class Record extends BaseEntity {
         if(!this.userId.equals(userId)) throw new RecordMissMatchException(ErrorCode.RECORD_MISS_MATCH);
         this.rep = updateRecord.getRep();
         this.weight = updateRecord.getWeight();
+    }
+
+    public void addSaveTime(LocalDate savTime) {
+        this.saveTime = savTime;
     }
 }
