@@ -12,7 +12,6 @@ public class PartDto {
 
     private Long routineId;
     private WorkoutPart workoutPart;
-    private Boolean isChecked = true;
 
     public PartDto(Long routineId, WorkoutPart workoutPart) {
         this.routineId = routineId;

@@ -22,7 +22,11 @@ public enum ErrorCode {
 
     // Routine
     ROUTINE_NOT_FOUND(504, "R001", "해당 운동 루틴은 존재하지 않습니다"),
-    ROUTINE_MISS_MATCH(505, "R002", "해당 사용자의 루틴이 아닙니다");
+    ROUTINE_MISS_MATCH(505, "R002", "해당 사용자의 루틴이 아닙니다"),
+
+    // Record
+    RECORD_NOT_FOUND(507, "RC001", "해당 기록이 존재하지 않습니다"),
+    RECORD_MISS_MATCH(508, "RC002", "해당 사용자의 기록이 아닙니다");
     private final int status;
     private final String code;
     private final String message;
