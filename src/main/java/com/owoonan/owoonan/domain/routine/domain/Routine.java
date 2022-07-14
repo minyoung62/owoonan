@@ -57,7 +57,6 @@ public class Routine extends BaseEntity {
 
     public void addParts(List<Part> parts) {
         for(Part part: parts) {
-            System.out.println("tt"+part);
             this.parts.add(part);
             part.addRoutine(this);
         }

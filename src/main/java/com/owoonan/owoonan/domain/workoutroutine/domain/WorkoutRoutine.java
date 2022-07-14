@@ -45,7 +45,7 @@ public class WorkoutRoutine extends BaseEntity {
         for(Workout w: workouts) {
             System.out.println(w.getWorkoutId());
             if(w == null) throw new WorkoutNotFoundException(ErrorCode.WORKOUT_NOT_FOUND);
-            if(w.getUser().getUserId() != userId) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
+            if(!w.getUser().getUserId().equals(userId)) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
             WorkoutRoutine workoutRoutine = new WorkoutRoutine();
             workoutRoutine.setWorkout(w);
             workoutRoutines.add(workoutRoutine);
