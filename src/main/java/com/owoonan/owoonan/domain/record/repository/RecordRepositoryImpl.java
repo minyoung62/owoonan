@@ -75,9 +75,7 @@ public class RecordRepositoryImpl implements RecordRepositoryCustom{
         YearMonth targetYearMonth = YearMonth.from(localDate);
         LocalDate start = targetYearMonth.atDay(1);
         LocalDate end = targetYearMonth.atEndOfMonth();
-
-        RecordOfMonthResponse recordOfMonthResponse = new RecordOfMonthResponse();
-
+        
         List<DayRecord> result = query.select(Projections.constructor(DayRecord.class, record.saveTime))
                 .from(record).distinct()
                 .where(record.userId.eq(userId), record.saveTime.between(start, end))
