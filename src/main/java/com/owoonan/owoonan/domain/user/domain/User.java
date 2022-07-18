@@ -37,11 +37,9 @@ public class User extends BaseEntity {
     @NotNull
     private String password;
 
-    @Column(name = "EMAIL", length = 512, unique = true)
+    @Column(name = "EMAIL", length = 512)
     @NotNull
     private String email;
-
-
 
     @Column(name = "EMAIL_VERIFIED_YN", length = 1)
     @NotNull
