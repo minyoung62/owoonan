@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 
@@ -14,6 +16,8 @@ import java.util.List;
 @Getter
 public class RoutineUpdateRequestDto {
 
+    @Size(min=1, max=30, message = "1자~30자의 루틴 이름여야 합니다")
+    @NotNull
     private String routineName;
     private List<Long> workoutIds;
     private List<WorkoutPart> workoutParts;

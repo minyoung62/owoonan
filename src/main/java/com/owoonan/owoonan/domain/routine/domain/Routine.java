@@ -8,6 +8,8 @@ import com.owoonan.owoonan.global.common.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class Routine extends BaseEntity {
     @Column(nullable = false)
     private Long routineId;
 
+    @Size(min=1, max=30, message = "1자~30자의 루틴 이름여야 합니다")
+    @NotNull
     @Column(length = 40,nullable = false)
     private String routineName;
 
