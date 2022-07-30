@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,8 @@ public class Workout extends BaseEntity {
     @Column(nullable = false)
     private Long workoutId;
 
-    @Column(length = 40, nullable = false)
+    @Size(min=1, max=30, message = "1자~30자의 루틴 이름여야 합니다")
+    @NotNull
     private String workoutName;
 
 
