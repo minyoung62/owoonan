@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +19,11 @@ import java.util.stream.Collectors;
 @Data
 public class RecordsCreateRequestDto {
 
+    @NotNull
     private Long workoutId;
-    private List<RecordRequestDto> recordDtos;
+
+    @NotNull
+    private List<@Valid RecordRequestDto> recordDtos;
 
     public List<Record> toEntity() {
         return recordDtos.stream()

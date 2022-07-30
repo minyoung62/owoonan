@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,7 +16,9 @@ import java.util.List;
 public class RecordCreateRequest {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate saveDay;
+    @NotNull
+    private LocalDate saveDate;
 
-    private List<RecordsCreateRequestDto> requestDtos;
+    @NotNull
+    private List<@Valid RecordsCreateRequestDto> requestDtos;
 }
