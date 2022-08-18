@@ -51,7 +51,7 @@ public class WorkoutService {
         Workout workout = workoutRepository.findById(workoutId)
                 .orElseThrow(() -> new WorkoutNotFoundException(ErrorCode.WORKOUT_NOT_FOUND));
 
-        if (workout.getUser().getUserId() != user.getUserId()) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
+        if (!workout.getUser().getUserId().equals(user.getUserId())) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
         workoutRepository.delete(workout);
     }
 

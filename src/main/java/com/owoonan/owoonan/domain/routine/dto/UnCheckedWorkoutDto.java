@@ -12,7 +12,6 @@ public class UnCheckedWorkoutDto {
 
     private Long workoutId;
     private String workoutName;
-    private Boolean isChecked = false;
 
     public UnCheckedWorkoutDto(Long workoutId, String workoutName) {
         this.workoutId = workoutId;

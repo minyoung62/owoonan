@@ -55,7 +55,7 @@ public class RoutineService {
         User user = getUser(userId);
         Routine routine = routineRepository.findById(routineId)
                 .orElseThrow(() -> new RoutineNotFoundException(ErrorCode.ROUTINE_NOT_FOUND));
-        if (routine.getUser().getUserId() != user.getUserId()) throw new RoutineMissMatchException(ErrorCode.ROUTINE_MISS_MATCH);
+        if (!routine.getUser().getUserId().equals(user.getUserId())) throw new RoutineMissMatchException(ErrorCode.ROUTINE_MISS_MATCH);
 
         List<Workout> workouts = workoutRepository.findByWorkoutIds(workoutIds);
         List<WorkoutRoutine> workoutRoutines = WorkoutRoutine.createWorkoutRoutines(workouts, userId);
@@ -76,7 +76,7 @@ public class RoutineService {
     @Transactional(readOnly = true)
     public WorkoutRoutineResponseDto findOne(final Long routineId, final String userId) {
         Routine routine = routineRepository.findById(routineId).orElseThrow(() -> new RoutineNotFoundException(ErrorCode.ROUTINE_NOT_FOUND));
-        if (routine.getUser().getUserId() != userId) throw new RoutineMissMatchException(ErrorCode.ROUTINE_MISS_MATCH);
+        if (!routine.getUser().getUserId().equals(userId)) throw new RoutineMissMatchException(ErrorCode.ROUTINE_MISS_MATCH);
         return routineRepository.findWorkoutRoutineResponseDto(routine.getRoutineId());
     }
 
@@ -84,7 +84,7 @@ public class RoutineService {
     @Transactional(readOnly = true)
     public List<UnCheckParOfWorkout> findUncheckedWorkout(final Long routineId, final String userId) {
         Routine routine = routineRepository.findById(routineId).orElseThrow(() -> new RoutineNotFoundException(ErrorCode.ROUTINE_NOT_FOUND));
-        if (routine.getUser().getUserId() != userId) throw new RoutineMissMatchException(ErrorCode.ROUTINE_MISS_MATCH);
+
         List<Part> parts = routineRepository.findPartById(routine.getRoutineId());
         List<WorkoutPart> workoutParts= new ArrayList<>();
         for(Part part: parts) {
@@ -98,8 +98,8 @@ public class RoutineService {
     public void delete(final Long routineId, final String userId) {
         User user = getUser(userId);
         Routine routine = routineRepository.findById(routineId)
-                .orElseThrow(() -> new RoutineNotFoundException(ErrorCode.USER_NOT_FOUND));
-        if (routine.getUser().getUserId() != user.getUserId()) {
+                .orElseThrow(() -> new RoutineNotFoundException(ErrorCode.ROUTINE_NOT_FOUND));
+        if (!routine.getUser().getUserId().equals(userId)) {
             throw new RoutineMissMatchException(ErrorCode.ROUTINE_MISS_MATCH);
         }
 
