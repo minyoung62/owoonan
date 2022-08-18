@@ -11,7 +11,6 @@ import lombok.Setter;
 public class WorkoutDto {
     private Long workoutId;
     private String workoutName;
-    private Boolean isChecked = true;
 
     public WorkoutDto(Long workoutId, String workoutName) {
         this.workoutId = workoutId;

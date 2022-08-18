@@ -59,7 +59,7 @@ public class Workout extends BaseEntity {
     }
 
     public void update(final Workout updateWorkout, final User user) {
-        if (this.getUser().getUserId() != user.getUserId()) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
+        if (!this.getUser().getUserId().equals(user.getUserId())) throw new WorkoutMissMatchException(ErrorCode.WORKOUT_MISS_MATCH);
         if (this.workoutName.equals(updateWorkout.getWorkoutName())) throw new WorkoutNameDuplicationException(ErrorCode.WORKOUT_NAME_DUPLICATION);
         this.workoutName = updateWorkout.getWorkoutName();
     }

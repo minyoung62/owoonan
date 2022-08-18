@@ -2,6 +2,7 @@ package com.owoonan.owoonan.domain.routine.api;
 
 import com.owoonan.owoonan.domain.routine.dto.*;
 import com.owoonan.owoonan.domain.routine.service.RoutineService;
+
 import com.owoonan.owoonan.global.error.ErrorResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -79,6 +80,7 @@ public class RoutineApi {
     public ResponseEntity<WorkoutRoutineResponseDto> findOne(@PathVariable Long routineId) {
         return ResponseEntity.status(HttpStatus.OK).body(routineService.findOne(routineId, getPrincipal().getUsername()));
     }
+
 
     @GetMapping("/{routineId}/uncheckedWorkout")
     @ApiOperation(value = "루틴에 포함되지 않은 운동 가져오기")
