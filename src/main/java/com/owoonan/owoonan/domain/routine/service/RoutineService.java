@@ -85,7 +85,6 @@ public class RoutineService {
     public List<UnCheckParOfWorkout> findUncheckedWorkout(final Long routineId, final String userId) {
         Routine routine = routineRepository.findById(routineId).orElseThrow(() -> new RoutineNotFoundException(ErrorCode.ROUTINE_NOT_FOUND));
 
-        if (!routine.getUser().getUserId().equals(userId)) throw new RoutineMissMatchException(ErrorCode.ROUTINE_MISS_MATCH);
         List<Part> parts = routineRepository.findPartById(routine.getRoutineId());
         List<WorkoutPart> workoutParts= new ArrayList<>();
         for(Part part: parts) {
