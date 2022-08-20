@@ -41,4 +41,14 @@ public class Post extends BaseEntity {
         this.workoutEndTime = workoutEndTime;
         this.user = user;
     }
+
+    public void add(User user) {
+        this.user = user;
+    }
+
+    public void patch(Post updatedPost) {
+        this.content = updatedPost.getContent();
+        this.workoutEndTime = updatedPost.workoutEndTime;
+        this.workoutStartTime = updatedPost.workoutStartTime;
+    }
 }
