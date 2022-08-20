@@ -26,7 +26,12 @@ public enum ErrorCode {
 
     // Record
     RECORD_NOT_FOUND(507, "RC001", "해당 기록이 존재하지 않습니다"),
-    RECORD_MISS_MATCH(508, "RC002", "해당 사용자의 기록이 아닙니다");
+    RECORD_MISS_MATCH(508, "RC002", "해당 사용자의 기록이 아닙니다"),
+
+    // Post
+    POST_NOT_FOUND(400, "P001", "해당 포스트가 존재하지 않습니다."),
+    POST_NOT_MISSMATCH(400, "P002" , "해당 포스터의 사용자가 아닙니다.");
+
     private final int status;
     private final String code;
     private final String message;
