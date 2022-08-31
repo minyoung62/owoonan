@@ -3,21 +3,29 @@ package com.owoonan.owoonan.domain.post.service;
 import com.owoonan.owoonan.domain.post.domain.Post;
 import com.owoonan.owoonan.domain.post.error.PostNotFoundException;
 import com.owoonan.owoonan.domain.post.repository.PostRepository;
+import com.owoonan.owoonan.domain.post.util.GivenImage;
 import com.owoonan.owoonan.domain.post.util.GivenPost;
 import com.owoonan.owoonan.domain.user.domain.User;
 import com.owoonan.owoonan.domain.user.util.GivenUser;
 import com.owoonan.owoonan.global.error.exception.ErrorCode;
 import com.owoonan.owoonan.global.jwt.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import org.testng.Assert;
 import javax.transaction.Transactional;
 
+import java.awt.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SpringBootTest
@@ -38,8 +46,10 @@ class PostServiceTest {
 
     @BeforeEach
     void init () {
+
         user = userRepository.save(GivenUser.toEntity());
-        postId = postService.create(GivenPost.toEntity(), user.getUserId());
+      List<MultipartFile> files = new ArrayList<>();
+        postId = postService.create(GivenPost.toEntity() ,files ,user.getUserId());
     }
 
     @Test
@@ -50,11 +60,14 @@ class PostServiceTest {
                 .workoutStartTime(LocalDate.now())
                 .workoutEndTime(LocalDate.now())
                 .build();
+
         // where
-        Long postId = postService.create(createdPost, user.getUserId());
+        Long postId = postService.create(createdPost , GivenImage.getImages(), user.getUserId());
         Post savedPost = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+
         // then
+        Assert.assertEquals(2, savedPost.getImages().size());
         Assert.assertEquals(postId, savedPost.getId());
     }
 
@@ -78,9 +91,7 @@ class PostServiceTest {
     void delete() {
         // given when
         postService.delete(postId, user.getUserId());
-
         //then
-       ;
         Assert.assertThrows(PostNotFoundException.class,
                 () -> {
                     postRepository.findById(postId).orElseThrow( () ->
