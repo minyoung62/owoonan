@@ -27,11 +27,11 @@ public class Comment extends BaseEntity {
     @Column(nullable = true)
     private Long parentId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
@@ -42,5 +42,17 @@ public class Comment extends BaseEntity {
         this.parentId = parentId;
         this.user = user;
         this.post = post;
+    }
+
+    public void addPost(Post post) {
+        this.post = post;
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+    }
+
+    public void patch(Comment updatedComment) {
+        this.contents = updatedComment.getContents();
     }
 }
