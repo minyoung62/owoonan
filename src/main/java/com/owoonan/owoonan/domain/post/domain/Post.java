@@ -1,5 +1,7 @@
 package com.owoonan.owoonan.domain.post.domain;
 
+import com.owoonan.owoonan.domain.comment.domain.Comment;
+import com.owoonan.owoonan.domain.image.domain.Image;
 import com.owoonan.owoonan.domain.user.domain.User;
 import com.owoonan.owoonan.global.common.BaseEntity;
 
@@ -10,6 +12,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,13 +27,17 @@ public class Post extends BaseEntity {
     @NotNull
     private String content;
 
-    @NotNull
     private LocalDate workoutStartTime;
 
-    @NotNull
     private LocalDate workoutEndTime;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",  cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -42,7 +50,7 @@ public class Post extends BaseEntity {
         this.user = user;
     }
 
-    public void add(User user) {
+    public void addUser(User user) {
         this.user = user;
     }
 
@@ -51,4 +59,8 @@ public class Post extends BaseEntity {
         this.workoutEndTime = updatedPost.workoutEndTime;
         this.workoutStartTime = updatedPost.workoutStartTime;
     }
+
+  public void addImages(List<Image> images) {
+    this.images = images;
+  }
 }
