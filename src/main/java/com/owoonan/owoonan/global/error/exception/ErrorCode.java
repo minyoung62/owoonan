@@ -30,7 +30,12 @@ public enum ErrorCode {
 
     // Post
     POST_NOT_FOUND(400, "P001", "해당 포스트가 존재하지 않습니다."),
-    POST_NOT_MISSMATCH(400, "P002" , "해당 포스터의 사용자가 아닙니다.");
+    POST_NOT_MISSMATCH(400, "P002" , "해당 포스터의 사용자가 아닙니다."),
+
+    // Comment
+    COMMENT_NOT_FOUND(400, "C001", "해당 댓글이 존재하지 않습니다."),
+    COMMENT_MISS_MATCH(400, "C002", "해당 댓글의 사용자가 아닙니다.");
+
 
     private final int status;
     private final String code;
