@@ -50,6 +50,17 @@ spring:
       matching-strategy: ant_path_matcher
 
 
+gcp:
+  config:
+    file: gcp-account-file.json
+  project:
+    id: voltaic-range-354511
+  bucket:
+    id: owoonan-bucket
+  dir:
+    name: owoonan-bucket
+
+
 # cors 설정
 cors:
   allowed-origins: 'http://localhost:3000'
