@@ -1,12 +1,15 @@
 package com.owoonan.owoonan.domain.post.api;
 
+import com.owoonan.owoonan.domain.post.domain.Post;
 import com.owoonan.owoonan.domain.post.dto.PostCreateRequest;
 import com.owoonan.owoonan.domain.post.repository.PostRepository;
 import com.owoonan.owoonan.domain.post.service.PostService;
 import com.owoonan.owoonan.domain.post.util.GivenImage;
+import com.owoonan.owoonan.domain.post.util.GivenPost;
 import com.owoonan.owoonan.domain.user.domain.User;
 import com.owoonan.owoonan.domain.user.domain.vo.RoleType;
 import com.owoonan.owoonan.domain.user.util.GivenUser;
+import com.owoonan.owoonan.global.jwt.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -41,6 +45,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,11 +59,18 @@ class PostApiControllerTest {
 
   @Autowired
   private PostRepository postRepository;
+  @Autowired
+  private UserRepository userRepository;
 
   static User user;
-
+  static Long postId;
   @BeforeEach
   void beforeEach() {
+//    user = userRepository.save(GivenUser.toEntity());
+//    if(user == null) throw new IllegalArgumentException("adsf");
+//    List<MultipartFile> files = new ArrayList<>();
+//    postId = postService.create(GivenPost.toEntity() ,files ,user.getUserId());
+
     mockMvc = MockMvcBuilders.standaloneSetup(postApiController).build();
     user = GivenUser.toEntity();
     List<GrantedAuthority> role = AuthorityUtils.createAuthorityList(RoleType.USER.name());
@@ -79,8 +91,6 @@ class PostApiControllerTest {
     PostCreateRequest req = PostCreateRequest.builder()
       .contents("test contents")
       .images(imageFiles)
-//      .workoutStartTime(time)
-//      .workoutEndTime(time)
       .build();
 
     when(postService.create(any(), any(), any())).thenReturn(1L);
@@ -91,13 +101,22 @@ class PostApiControllerTest {
         .file("images", imageFiles.get(0).getBytes())
         .file("images", imageFiles.get(1).getBytes())
         .param("contents", req.getContents())
-//        .param("workoutStartTime", String.valueOf(req.getWorkoutStartTime()))
-//        .param("workoutEndTime", String.valueOf(req.getWorkoutEndTime()))
         .with(requestPostProcessor -> {
           requestPostProcessor.setMethod("POST");
           return requestPostProcessor;
         })
         .contentType(MediaType.MULTIPART_FORM_DATA))
         .andExpect(status().isCreated());
+  }
+
+  @Test
+  @WithMockUser(roles = "USER")
+  void findAllPost() throws Exception {
+
+
+
+    mockMvc.perform(get("/api/v1/post")
+      .accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk());
   }
 }
