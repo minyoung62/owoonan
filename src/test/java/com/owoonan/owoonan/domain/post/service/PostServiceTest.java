@@ -1,6 +1,7 @@
 package com.owoonan.owoonan.domain.post.service;
 
 import com.owoonan.owoonan.domain.post.domain.Post;
+import com.owoonan.owoonan.domain.post.dto.PostUpdateDto;
 import com.owoonan.owoonan.domain.post.error.PostNotFoundException;
 import com.owoonan.owoonan.domain.post.repository.PostRepository;
 import com.owoonan.owoonan.domain.post.util.GivenImage;
@@ -48,23 +49,23 @@ class PostServiceTest {
     void init () {
 
         user = userRepository.save(GivenUser.toEntity());
-      List<MultipartFile> files = new ArrayList<>();
+      List<MultipartFile> files = GivenImage.getImages();
         postId = postService.create(GivenPost.toEntity() ,files ,user.getUserId());
     }
 
     @Test
     void create() {
         // given
-        Post createdPost = Post.builder()
-                .content("content")
-                .workoutStartTime(LocalDate.now())
-                .workoutEndTime(LocalDate.now())
-                .build();
+      Post createdPost = Post.builder()
+        .content("content")
+        .workoutStartTime(LocalDate.now())
+        .workoutEndTime(LocalDate.now())
+        .build();
 
         // where
-        Long postId = postService.create(createdPost , GivenImage.getImages(), user.getUserId());
-        Post savedPost = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+      Long postId = postService.create(createdPost , GivenImage.getImages(), user.getUserId());
+      Post savedPost = postRepository.findById(postId)
+        .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
 
         // then
         Assert.assertEquals(2, savedPost.getImages().size());
@@ -74,17 +75,33 @@ class PostServiceTest {
     @Test
     void update() {
         // given
-        Post updatedPost = Post.builder()
-                .content("업데이트된포스트입니다")
-                .workoutEndTime(LocalDate.now())
-                .workoutStartTime(LocalDate.now())
-                .build();
+      String imgPath1 = "update1.png";
+      String imgName1 = "update1";
+      String imgPath2 = "add1.png";
+      String imgName2 = "add1";
+      List<MultipartFile> updateImages = List.of(
+        new MockMultipartFile(imgName1, imgPath1, MediaType.IMAGE_PNG_VALUE, imgName1.getBytes()),
+        new MockMultipartFile(imgName2, imgPath2, MediaType.IMAGE_PNG_VALUE, imgName2.getBytes())
+      );
+      Post findPost = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+      Long updateImageId = findPost.getImages().get(0).getId();
+      List<Long> updateIds = List.of(updateImageId);
+      System.out.println(updateIds);
+      PostUpdateDto postUpdateDto = new PostUpdateDto("updateContante", updateIds, updateImages);
+
         // when
-        postService.update(postId, updatedPost, user.getUserId());
-        Post post = postRepository.findById(postId)
+        postService.update(postId,
+          postUpdateDto.toEntity(),
+          postUpdateDto.getUpdateImageIds(),
+          postUpdateDto.getUpdateImages(),
+          user.getUserId());
+
+        Post updatedPost = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
         // then
-        Assert.assertEquals(updatedPost.getContent(), post.getContent());
+        Assert.assertEquals(postUpdateDto.getContents(), updatedPost.getContent());
+      Assert.assertEquals(postUpdateDto.getUpdateImages().size(), 2);
+
     }
 
     @Test
