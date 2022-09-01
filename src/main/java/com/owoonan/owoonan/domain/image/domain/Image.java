@@ -5,14 +5,12 @@ import com.owoonan.owoonan.global.common.BaseEntity;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
-@NoArgsConstructor
 public class Image extends BaseEntity {
 
     @Id
@@ -35,5 +33,4 @@ public class Image extends BaseEntity {
         this.imageUrl = imageUrl;
         this.post = post;
     }
-
 }

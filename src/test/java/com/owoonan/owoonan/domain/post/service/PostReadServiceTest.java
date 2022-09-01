@@ -85,7 +85,7 @@ class PostReadServiceTest {
             }
             for(int i = 0; i < imageUrlcount; i++) {
 
-                Image image = Image.builder().imageName("imageName").imageUrl("imageUrl").post(post).build();
+                Image image = Image.builder().imageUrl("imageUrl").post(post).build();
                 imageRepository.save(image);
             }
         });
@@ -97,7 +97,7 @@ class PostReadServiceTest {
         //given
         PostSearchDto postSearchDto = new PostSearchDto(0, 10);
         // when
-        List<PostResponseDto> postResponseDtos = postReadService.findAll(postSearchDto, user.getUserId());
+        List<PostResponseDto> postResponseDtos = postReadService.findAll(postSearchDto);
         //then
 
         assertEquals(10, postResponseDtos.size());
@@ -107,7 +107,7 @@ class PostReadServiceTest {
     void findPostDetail() {
         // given
         PostSearchDto postSearchDto = new PostSearchDto(0, 10);
-        PostResponseDto postResponseDto = postRepository.findAllPostResponseDto(postSearchDto, user.getUserId()).get(0);
+        PostResponseDto postResponseDto = postRepository.findAllPostResponseDto(postSearchDto).get(0);
 
         // when
         PostDetailResponseDto postDetail = postReadService.findPostDetail(postResponseDto.getPostId(), null);
