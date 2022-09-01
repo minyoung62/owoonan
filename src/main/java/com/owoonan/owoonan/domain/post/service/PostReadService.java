@@ -16,8 +16,8 @@ import java.util.List;
 public class PostReadService {
     private final PostRepository postRepository;
 
-    public List<PostResponseDto> findAll(PostSearchDto postSearchDto, String userId) {
-        return postRepository.findAllPostResponseDto(postSearchDto, userId);
+    public List<PostResponseDto> findAll(PostSearchDto postSearchDto) {
+        return postRepository.findAllPostResponseDto(postSearchDto);
     }
 
     public PostDetailResponseDto findPostDetail(final Long postId, final String userId) {

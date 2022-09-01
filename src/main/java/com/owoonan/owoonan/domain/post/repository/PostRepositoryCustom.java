@@ -7,7 +7,7 @@ import com.owoonan.owoonan.domain.post.dto.PostSearchDto;
 import java.util.List;
 
 public interface PostRepositoryCustom {
-    List<PostResponseDto> findAllPostResponseDto(PostSearchDto postSearchDto, String userId);
+    List<PostResponseDto> findAllPostResponseDto(PostSearchDto postSearchDto);
 
     PostDetailResponseDto findPostDetail(Long postId, String userId);
 }

@@ -26,15 +26,15 @@ import static com.querydsl.jpa.JPAExpressions.select;
 public class PostRepositoryImpl implements PostRepositoryCustom{
     private final JPAQueryFactory query;
 
-    public List<PostResponseDto> findAllPostResponseDto(PostSearchDto postSearchDto, String userId) {
+    public List<PostResponseDto> findAllPostResponseDto(PostSearchDto postSearchDto) {
         List<PostResponseDto> result = query.select(Projections.constructor(PostResponseDto.class,
                         post.id,
                         post.content,
                         comment.count(),
                         likely.count()))
                 .from(post)
-                .leftJoin(comment).on(post.id.eq(comment.post.id))
-                .leftJoin(likely).on(post.id.eq(likely.post.id))
+                .join(comment).on(post.id.eq(comment.post.id))
+                .join(likely).on(post.id.eq(likely.post.id))
                 .groupBy(post)
                 .offset(postSearchDto.getOffset())
                 .limit(postSearchDto.getLimit())
@@ -60,7 +60,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                         post.content,
                         likely.count()))
                 .from(post)
-                .leftJoin(likely).on(post.id.eq(likely.post.id))
+                .join(likely).on(post.id.eq(likely.post.id))
                 .where(post.id.eq(postId))
                 .groupBy(post)
                 .fetchOne();
@@ -70,7 +70,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                     .from(QLikely.likely)
                     .where(QLikely.likely.post.id.eq(postId).and(QLikely.likely.user.userId.eq(userId)))
                     .fetchOne();
-            if (likely != null) {
+            if (likely == null) {
+                postDetailResponseDto.setIsLike(false);
+            } else {
                 postDetailResponseDto.setIsLike(true);
             }
         }

@@ -39,15 +39,6 @@ public class DataBucketUtil {
   @Value("${gcp.dir.name}")
   private String gcpDirectoryName;
 
-  public void deleteFile(String objectName) throws IOException {
-    InputStream inputStream = new ClassPathResource(gcpConfigFile).getInputStream();
-
-    StorageOptions options = StorageOptions.newBuilder().setProjectId(gcpProjectId)
-      .setCredentials(GoogleCredentials.fromStream(inputStream)).build();
-
-    Storage storage = options.getService();
-    storage.delete(gcpBucketId, objectName);
-  }
 
   public FileDto uploadFile(MultipartFile multipartFile, String fileName, String contentType) {
 
@@ -56,7 +47,14 @@ public class DataBucketUtil {
       LOGGER.debug("Start file uploading process on GCS");
       byte[] fileData = multipartFile.getBytes();
 
-      Bucket bucket = getBucket();
+      InputStream inputStream = new ClassPathResource(gcpConfigFile).getInputStream();
+
+      StorageOptions options = StorageOptions.newBuilder().setProjectId(gcpProjectId)
+        .setCredentials(GoogleCredentials.fromStream(inputStream)).build();
+
+      Storage storage = options.getService();
+
+      Bucket bucket = storage.get(gcpBucketId,Storage.BucketGetOption.fields(Storage.BucketField.IAMCONFIGURATION));
 
       RandomString id = new RandomString(6, ThreadLocalRandom.current());
       Blob blob = bucket.create(gcpDirectoryName + "/" + fileName + "-" + id.nextString() + checkFileExtension(fileName), fileData, contentType);
@@ -73,18 +71,6 @@ public class DataBucketUtil {
     throw new GCPFileUploadException("An error occurred while storing data to GCS");
   }
 
-  private Bucket getBucket() throws IOException {
-    InputStream inputStream = new ClassPathResource(gcpConfigFile).getInputStream();
-
-    StorageOptions options = StorageOptions.newBuilder().setProjectId(gcpProjectId)
-      .setCredentials(GoogleCredentials.fromStream(inputStream)).build();
-
-    Storage storage = options.getService();
-
-
-    Bucket bucket = storage.get(gcpBucketId,Storage.BucketGetOption.fields(Storage.BucketField.IAMCONFIGURATION));
-    return bucket;
-  }
   private File convertFile(MultipartFile file) {
 
     try{
