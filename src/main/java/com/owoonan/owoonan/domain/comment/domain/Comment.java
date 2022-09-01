@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Getter
-@NoArgsConstructor
 public class Comment extends BaseEntity {
 
     @Id
