@@ -31,6 +31,9 @@ public class Post extends BaseEntity {
     @NotNull
     private String content;
 
+    @NotNull
+    private String username;
+
     private LocalDate workoutStartTime;
 
     private LocalDate workoutEndTime;
@@ -46,9 +49,10 @@ public class Post extends BaseEntity {
     private User user;
 
     @Builder
-    public Post(Long id, String content, LocalDate workoutStartTime, LocalDate workoutEndTime, User user) {
+    public Post(Long id, String content, String username, LocalDate workoutStartTime, LocalDate workoutEndTime, User user) {
         this.id = id;
         this.content = content;
+        this.username = username;
         this.workoutStartTime = workoutStartTime;
         this.workoutEndTime = workoutEndTime;
         this.user = user;
@@ -57,6 +61,7 @@ public class Post extends BaseEntity {
 
   public void addUser(User user) {
         this.user = user;
+        this.username = user.getUsername();
     }
 
     public void patch(Post updatedPost, List<Long> updatedImageIds) {
