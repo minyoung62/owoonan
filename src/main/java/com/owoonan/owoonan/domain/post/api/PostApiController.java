@@ -35,19 +35,21 @@ public class PostApiController {
 
   @GetMapping()
   public ResponseEntity<List<PostResponseDto>> findAllPost(@ModelAttribute PostSearchDto postSearchDto) {
-    return ResponseEntity.status(HttpStatus.OK).body(postReadService.findAll(postSearchDto, getPrincipal().getUsername()));
+    return ResponseEntity.status(HttpStatus.OK).body(postReadService
+      .findAll(postSearchDto, getPrincipal() != null ? getPrincipal().getUsername() : null));
   }
 
   @GetMapping("{postId}")
   public ResponseEntity<PostDetailResponseDto> findOnePostDetail(@PathVariable Long postId) {
-    return ResponseEntity.status(HttpStatus.OK).body(postReadService.findPostDetail(postId, getPrincipal().getUsername()));
+    return ResponseEntity.status(HttpStatus.OK).body(postReadService
+      .findPostDetail(postId, getPrincipal() != null ? getPrincipal().getUsername() : null));
   }
 
   @PutMapping("{postId}")
   public ResponseEntity<Void> patch(
-            @PathVariable Long postId,
-            @Valid @ModelAttribute PostUpdateDto postUpdateDto) {
-    postService.update(postId, postUpdateDto.toEntity(),postUpdateDto.getUpdateImageIds() ,postUpdateDto.getUpdateImages() ,getPrincipal().getUsername());
+    @PathVariable Long postId,
+    @Valid @ModelAttribute PostUpdateDto postUpdateDto) {
+    postService.update(postId, postUpdateDto.toEntity(), postUpdateDto.getUpdateImageIds(), postUpdateDto.getUpdateImages(), getPrincipal().getUsername());
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 
@@ -58,14 +60,13 @@ public class PostApiController {
   }
 
 
-
   public User getPrincipal() {
-     if (SecurityContextHolder
-        .getContext()
-        .getAuthentication().getPrincipal()
-        .equals("anonymousUser")) {
-        return null;
-     }
+    if (SecurityContextHolder
+      .getContext()
+      .getAuthentication().getPrincipal()
+      .equals("anonymousUser")) {
+      return null;
+    }
     return (org.springframework.security.core.userdetails.User) SecurityContextHolder
       .getContext()
       .getAuthentication()
