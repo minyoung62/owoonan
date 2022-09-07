@@ -28,14 +28,13 @@ public class PostApiController {
 
   @PostMapping()
   public ResponseEntity<Long> create(@Valid @ModelAttribute PostCreateRequest postCreateRequest) {
-
+    System.out.println(getPrincipal().getUsername());
     Long postId = postService.create(postCreateRequest.toEntity(), postCreateRequest.getImages(), getPrincipal().getUsername());
     return ResponseEntity.status(HttpStatus.CREATED).body(postId);
   }
 
   @GetMapping()
   public ResponseEntity<List<PostResponseDto>> findAllPost(@ModelAttribute PostSearchDto postSearchDto) {
-
     return ResponseEntity.status(HttpStatus.OK).body(postReadService.findAll(postSearchDto, getPrincipal().getUsername()));
   }
 
@@ -61,6 +60,17 @@ public class PostApiController {
 
 
   public User getPrincipal() {
-    return (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+     if (SecurityContextHolder
+        .getContext()
+        .getAuthentication().getPrincipal()
+        .equals("anonymousUser")) {
+        return null;
+     }
+    return (org.springframework.security.core.userdetails.User) SecurityContextHolder
+      .getContext()
+      .getAuthentication()
+      .getPrincipal();
+
+
   }
 }
