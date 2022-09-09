@@ -23,62 +23,67 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class Post extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Size(max = 100000)
-    @NotNull
-    private String content;
+  @Size(max = 100000)
+  @NotNull
+  private String content;
 
-    @NotNull
-    private String username;
+  @NotNull
+  private String username;
 
-    private LocalDate workoutStartTime;
+  @NotNull
+  private String userId;
+  private LocalDate workoutStartTime;
 
-    private LocalDate workoutEndTime;
+  private LocalDate workoutEndTime;
 
-    @OneToMany(mappedBy = "post",  cascade = CascadeType.ALL, orphanRemoval=true)
-    private List<Image> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval=true)
-    private List<Comment> comments = new ArrayList<>();
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Image> images = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Comment> comments = new ArrayList<>();
 
-    @Builder
-    public Post(Long id, String content, String username, LocalDate workoutStartTime, LocalDate workoutEndTime, User user) {
-        this.id = id;
-        this.content = content;
-        this.username = username;
-        this.workoutStartTime = workoutStartTime;
-        this.workoutEndTime = workoutEndTime;
-        this.user = user;
-    }
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
+
+  @Builder
+  public Post(Long id, String content, String username, String userId, LocalDate workoutStartTime, LocalDate workoutEndTime, User user) {
+    this.id = id;
+    this.content = content;
+    this.username = username;
+    this.userId = userId;
+    this.workoutStartTime = workoutStartTime;
+    this.workoutEndTime = workoutEndTime;
+    this.user = user;
+  }
 
 
   public void addUser(User user) {
-        this.user = user;
-        this.username = user.getUsername();
-    }
+    this.user = user;
+    this.username = user.getUsername();
+    this.userId = user.getUserId();
+  }
 
-    public void patch(Post updatedPost, List<Long> updatedImageIds) {
-        this.content = updatedPost.getContent();
-      List<Long> imgIds = images.stream().map(i -> i.getId()).collect(Collectors.toList());
-      updatedImageIds.forEach(updatedImageId -> {
-          if (imgIds.contains(updatedImageId)) {
-            Image findImage = images.stream().filter(image -> updatedImageId.equals(image.getId())).findAny().orElse(null);
-            images.remove(findImage);
-          }
-        });
-        updatedPost.getImages().forEach(images -> {
-          this.images.add(images);
+  public void patch(Post updatedPost, List<Long> updatedImageIds) {
+    this.content = updatedPost.getContent();
+    List<Long> imgIds = images.stream().map(i -> i.getId()).collect(Collectors.toList());
+    updatedImageIds.forEach(updatedImageId -> {
+      if (imgIds.contains(updatedImageId)) {
+        Image findImage = images.stream().filter(image -> updatedImageId.equals(image.getId())).findAny().orElse(null);
+        images.remove(findImage);
+      }
+    });
+    updatedPost.getImages().forEach(images -> {
+      this.images.add(images);
 
-        });
+    });
 
-    }
+  }
 
   public void addImages(List<Image> images) {
     this.images = images;
