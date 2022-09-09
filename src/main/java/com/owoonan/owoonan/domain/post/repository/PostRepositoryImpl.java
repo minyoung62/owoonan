@@ -33,8 +33,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         post.id,
         post.content,
         post.username,
+        post.userId,
         comment.count(),
-        likely.count()))
+        likely.count(),
+        post.createTime,
+        post.lastModifiedTime ))
       .from(post)
       .leftJoin(comment).on(post.id.eq(comment.post.id))
       .leftJoin(likely).on(post.id.eq(likely.post.id))
