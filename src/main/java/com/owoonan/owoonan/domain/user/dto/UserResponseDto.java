@@ -13,14 +13,17 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserResponseDto {
 
-    private String Email;
-    private String username;
-    private RoleType roleType;
-    public static UserResponseDto of(User user) {
-        return UserResponseDto.builder()
-                .Email(user.getEmail())
-                .username(user.getUsername())
-                .roleType(user.getRoleType())
-                .build();
-    }
+  private String Email;
+  private String username;
+  private String userId;
+  private RoleType roleType;
+
+  public static UserResponseDto of(User user) {
+    return UserResponseDto.builder()
+      .Email(user.getEmail())
+      .username(user.getUsername())
+      .userId(user.getUserId())
+      .roleType(user.getRoleType())
+      .build();
+  }
 }
