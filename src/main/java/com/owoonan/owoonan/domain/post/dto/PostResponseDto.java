@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,7 +15,7 @@ public class PostResponseDto {
   private String contents;
   private String username;
   private String userId;
-  private List<ImageDto> imageDtos;
+  private List<ImageDto> imageDtos = new ArrayList<>();
   private Long commentCount;
   private LocalDateTime createdTime;
   private LocalDateTime lastModifiedTime;
