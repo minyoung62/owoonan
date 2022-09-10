@@ -37,7 +37,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         comment.count(),
         likely.count(),
         post.createTime,
-        post.lastModifiedTime ))
+        post.lastModifiedTime))
       .from(post)
       .leftJoin(comment).on(post.id.eq(comment.post.id))
       .leftJoin(likely).on(post.id.eq(likely.post.id))
@@ -54,7 +54,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     Map<Long, List<ImageDto>> imageDtoMap = imageDtos.stream().collect(Collectors.groupingBy(image -> image.getPostId()));
 
-    result.forEach(p -> p.setImageDtos(imageDtoMap.get(p.getPostId())));
+    result.forEach(p -> {
+      if (imageDtoMap.containsKey(p.getPostId())) {
+        p.setImageDtos(imageDtoMap.get(p.getPostId()));
+      }
+    });
 
     return result;
 
