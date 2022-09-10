@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,8 +16,8 @@ public class PostDetailResponseDto {
   private String contents;
   private String username;
   private String userId;
-  private List<ImageDto> imageUrls;
-  private List<CommentResponseDto> comments;
+  private List<ImageDto> imageUrls  = new ArrayList<>();
+  private List<CommentResponseDto> comments  = new ArrayList<>();
   private Long likelyCount;
   private Boolean isLike = false;
 
