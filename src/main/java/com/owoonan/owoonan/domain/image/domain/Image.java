@@ -25,7 +25,7 @@ public class Image extends BaseEntity {
     @NotNull
     private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
     @Builder
