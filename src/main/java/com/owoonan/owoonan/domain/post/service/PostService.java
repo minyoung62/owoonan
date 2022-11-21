@@ -31,71 +31,71 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class PostService {
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
+  private final PostRepository postRepository;
+  private final UserRepository userRepository;
 
-    private final ImageRepository imageRepository;
-    private final DataBucketUtil dataBucketUtil;
+  private final ImageRepository imageRepository;
+  private final DataBucketUtil dataBucketUtil;
 
-    public Long create(final Post requestPost, List<MultipartFile> files , final String userId) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null) throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+  public Long create(final Post requestPost, List<MultipartFile> files, final String userId) {
+    User user = userRepository.findByUserId(userId);
+    if (user == null) throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
 
-      List<Image> images = uploadImagesToGCPStorage(requestPost, files);
+    List<Image> images = uploadImagesToGCPStorage(requestPost, files);
 
-      requestPost.addUser(user);
-      requestPost.addImages(images);
-      Post savePost = postRepository.save(requestPost);
+    requestPost.addUser(user);
+    requestPost.addImages(images);
+    Post savePost = postRepository.save(requestPost);
 
-      return savePost.getId();
-    }
+    return savePost.getId();
+  }
 
 
   public void update(final Long postId,
-                       final Post updatedPost,
-                       final List<Long> updatedImageIds,
-                       final List<MultipartFile> updatedImages,
-                       final String userId) {
+                     final Post updatedPost,
+                     final List<Long> updatedImageIds,
+                     final List<MultipartFile> updatedImages,
+                     final String userId) {
 
-        User user = userRepository.findByUserId(userId);
-        if (user == null) throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+    User user = userRepository.findByUserId(userId);
+    if (user == null) throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
-        if (!userId.equals(post.getUser().getUserId())) throw new PostMissMatchException(ErrorCode.POST_NOT_MISSMATCH);
+    Post post = postRepository.findById(postId)
+      .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+    if (!userId.equals(post.getUser().getUserId())) throw new PostMissMatchException(ErrorCode.POST_NOT_MISSMATCH);
 
-        List<String> deletedImageObjectName = new ArrayList<>();
+    List<String> deletedImageObjectName = new ArrayList<>();
     List<Image> images = post.getImages();
     post.getImages().forEach(image -> {
-          if (updatedImageIds.contains(image.getId())) {
-            deletedImageObjectName.add(image.getImageName());
+      if (updatedImageIds.contains(image.getId())) {
+        deletedImageObjectName.add(image.getImageName());
 
-          }
-        });
+      }
+    });
 
 
-        deleteImagesToGCPStorage(deletedImageObjectName);
+    deleteImagesToGCPStorage(deletedImageObjectName);
     List<Image> addImages = uploadImagesToGCPStorage(post, updatedImages);
 
     updatedPost.addImages(addImages);
     post.patch(updatedPost, updatedImageIds);
 
-        postRepository.save(post);
-    }
+    postRepository.save(post);
+  }
 
-    public void delete(Long postId, String userId) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null) throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
+  public void delete(Long postId, String userId) {
+    User user = userRepository.findByUserId(userId);
+    if (user == null) throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
-        if (!userId.equals(post.getUser().getUserId())) throw new PostMissMatchException(ErrorCode.POST_NOT_MISSMATCH);
+    Post post = postRepository.findById(postId)
+      .orElseThrow(() -> new PostNotFoundException(ErrorCode.POST_NOT_FOUND));
+    if (!userId.equals(post.getUser().getUserId())) throw new PostMissMatchException(ErrorCode.POST_NOT_MISSMATCH);
 
-      List<String> deletedobjectImage = post.getImages().stream().map(image -> image.getImageName()).collect(Collectors.toList());
-      deleteImagesToGCPStorage(deletedobjectImage);
+    List<String> deletedobjectImage = post.getImages().stream().map(image -> image.getImageName()).collect(Collectors.toList());
+    deleteImagesToGCPStorage(deletedobjectImage);
 
-      postRepository.delete(post);
-    }
+    postRepository.delete(post);
+  }
 
   private List<Image> uploadImagesToGCPStorage(Post requestPost, List<MultipartFile> files) {
     List<Image> images = new ArrayList<>();
