@@ -1,10 +1,8 @@
 package com.owoonan.owoonan.domain.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.owoonan.owoonan.domain.routine.domain.Routine;
 import com.owoonan.owoonan.domain.user.domain.vo.ProviderType;
 import com.owoonan.owoonan.domain.user.domain.vo.RoleType;
-import com.owoonan.owoonan.domain.workout.domain.Workout;
 import com.owoonan.owoonan.global.common.BaseEntity;
 import com.sun.istack.NotNull;
 import lombok.Builder;
@@ -13,8 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @NoArgsConstructor
@@ -58,12 +55,6 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NotNull
     private RoleType roleType;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Routine> routines = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Workout> workouts = new ArrayList<>();
 
     @Builder
     public User(

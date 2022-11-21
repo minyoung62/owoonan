@@ -1,19 +1,15 @@
 package com.owoonan.owoonan.domain.user.service;
 
 import com.owoonan.owoonan.domain.user.domain.User;
-import com.owoonan.owoonan.domain.user.domain.vo.DefaultWorkout;
 import com.owoonan.owoonan.domain.user.domain.vo.RoleType;
 import com.owoonan.owoonan.domain.user.dto.UserResponseDto;
 import com.owoonan.owoonan.domain.user.error.UserAlreadyRegisterException;
 import com.owoonan.owoonan.domain.user.error.UserNotFoundException;
-import com.owoonan.owoonan.domain.workout.domain.Workout;
 import com.owoonan.owoonan.global.error.exception.ErrorCode;
 import com.owoonan.owoonan.global.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @Service
@@ -36,8 +32,6 @@ public class UserService {
     public void registerUser(final String userId) {
         User user = getUser(userId);
         if(user.getRoleType() != RoleType.GUEST) throw new UserAlreadyRegisterException(ErrorCode.USER_ALREADY_REGISTER);
-        List<Workout> workouts = DefaultWorkout.init(user);
-        user.setWorkouts(workouts);
         user.setRoleType(RoleType.USER);
         userRepository.save(user);
     }
