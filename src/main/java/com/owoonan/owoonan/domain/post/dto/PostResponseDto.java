@@ -1,11 +1,10 @@
 package com.owoonan.owoonan.domain.post.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class PostResponseDto {
   private Long postId;
   private String contents;

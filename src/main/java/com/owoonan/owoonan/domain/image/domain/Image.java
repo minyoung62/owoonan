@@ -15,25 +15,25 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class Image extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @NotNull
-    private String imageName;
+  @NotNull
+  private String imageName;
 
-    @NotNull
-    private String imageUrl;
+  @NotNull
+  private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Post post;
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Post post;
 
-    @Builder
-    public Image(Long id, String imageName, String imageUrl, Post post) {
-        this.id = id;
-        this.imageName = imageName;
-        this.imageUrl = imageUrl;
-        this.post = post;
-    }
+  @Builder
+  public Image(Long id, String imageName, String imageUrl, Post post) {
+    this.id = id;
+    this.imageName = imageName;
+    this.imageUrl = imageUrl;
+    this.post = post;
+  }
 
 }
